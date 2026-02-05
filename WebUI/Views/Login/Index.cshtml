@@ -1,0 +1,122 @@
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
+        <div class="login-container position-relative mx-auto">
+            <div class="login-header">
+                <div class="login-illustration mb-2">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h1 class="h4 mb-1 brand-badge">Sosyal Yardım Kart Sistemi</h1>
+                <p class="mb-0 small">Güvenli giriş yapın</p>
+            </div>
+            <div class="login-body">
+                <form method="post" asp-controller="Login" asp-action="Index" novalidate>
+                    <div class="mb-3">
+                        <label for="National_ID" class="form-label">T.C. Kimlik No</label>
+                        <input type="text" maxlength="11" pattern="[0-9]{11}" class="form-control" id="National_ID" 
+                               name="National_ID" placeholder="11 haneli T.C. Kimlik No" required />
+                        <div class="form-text">Sadece rakam giriniz.</div>
+                    </div>
+                    <div class="mb-3 position-relative password-wrapper">
+                        <label for="Password" class="form-label">Şifre</label>
+                        <input type="password" class="form-control pe-5" id="Password" name="Password" placeholder="Şifreniz" required />
+                        <button type="button" id="togglePassword" class="password-toggle" 
+                                aria-label="Şifreyi göster" data-state="hidden" title="Şifreyi göster">
+                            <span class="pw-icon" aria-hidden="true">
+                                <img src="/images/show.png" alt="Göster" width="20" height="20">
+                            </span>
+                        </button>
+                    </div>
+@section Styles {
+    <style>
+        .password-wrapper { }
+        .password-toggle {
+            position: absolute;
+            top: 69%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            color: #070404;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .55rem;
+            font-weight:600;
+            text-transform: uppercase;
+            opacity: 1;
+        }
+        .password-toggle:focus { outline: none; }
+    .password-toggle { font-size: .85rem; }
+    .password-toggle .pw-icon { display:block; line-height:1; }
+        .password-toggle.visible { opacity: 1; }
+    </style>
+}
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger py-2">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-login mt-2">Giriş Yap</button>
+                </form>
+                <div class="mt-4 text-center credit-badge">
+                    <span>&copy; @DateTime.Now.Year Sosyal Yardım Kart Sistemi</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+            const nationalInput = document.getElementById('National_ID');
+            if(nationalInput){
+                nationalInput.addEventListener('input', function(){
+                    this.value = this.value.replace(/\D/g,'').slice(0,11);
+                });
+            }
+            const toggleBtn = document.getElementById('togglePassword');
+            const pwd = document.getElementById('Password');
+            if(toggleBtn && pwd){
+                // Show toggle only when there is text
+                const updateToggleVisibility = () => {
+                    if(pwd.value.length > 0){
+                        toggleBtn.classList.add('visible');
+                    } else {
+                        toggleBtn.classList.remove('visible');
+                    }
+                };
+                pwd.addEventListener('input', updateToggleVisibility);
+                updateToggleVisibility();
+                toggleBtn.addEventListener('click', function(){
+                    const isHidden = this.getAttribute('data-state') === 'hidden';
+                    pwd.setAttribute('type', isHidden ? 'text' : 'password');
+                    const iconSpan = this.querySelector('.pw-icon');
+                    if (iconSpan) {
+                        iconSpan.innerHTML = isHidden
+                            ? '<img src="images/hide.png" alt="Gizle" width="20" height="20">'
+                            : '<img src="images/show.png" alt="Göster" width="20" height="20">';
+                    }
+                    this.setAttribute('data-state', isHidden ? 'shown' : 'hidden');
+                    this.setAttribute('aria-label', isHidden ? 'Şifreyi gizle' : 'Şifreyi göster');
+                    this.setAttribute('title', isHidden ? 'Şifreyi gizle' : 'Şifreyi göster');
+                });
+            }
+        })();
+    </script>
+}

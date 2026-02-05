@@ -1,0 +1,753 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Kart Yönetim Sistemi</title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h4 class="text-white"><i class="fas fa-shield-alt me-2"></i>Admin Panel</h4>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="#dashboard" data-section="dashboard" class="active"><i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span></a></li>
+        <li><a href="#citizens" data-section="citizens"><i class="fas fa-users me-2"></i><span>Vatandaşlar</span></a></li>
+        <li><a href="#cards" data-section="cards"><i class="fas fa-credit-card me-2"></i><span>Kartlar</span></a></li>
+        <li><a href="#transactions" data-section="transactions"><i class="fas fa-exchange-alt me-2"></i><span>İşlemler</span></a></li>
+        <li><a href="#alerts" data-section="alerts"><i class="fas fa-bell me-2"></i><span>Uyarılar</span></a></li>
+        <li><a href="#vendors" data-section="vendors"><i class="fas fa-store me-2"></i><span>Satıcılar</span></a></li>
+        <li><a href="#cardtypes" data-section="cardtypes"><i class="fas fa-tags me-2"></i><span>Kart Türleri</span></a></li>
+        <li><a href="#rules" data-section="rules"><i class="fas fa-gavel me-2"></i><span>Kurallar</span></a></li>
+    <li><a href="#flags" data-section="flags"><i class="fas fa-flag me-2"></i><span>İhlal Bayrakları</span></a></li>
+    <li><a href="#balancehistories" data-section="balancehistories"><i class="fas fa-history me-2"></i><span>Bakiye Geçmişi</span></a></li>
+    <li><a href="#monthlycredits" data-section="monthlycredits"><i class="fas fa-gift me-2"></i><span>Aylık Krediler</span></a></li>
+    <li><a href="#monthlyviolations" data-section="monthlyviolations"><i class="fas fa-exclamation-circle me-2"></i><span>Aylık İhlaller</span></a></li>
+    <li><a href="#segments" data-section="segments"><i class="fas fa-layer-group me-2"></i><span>Segmentler</span></a></li>
+    <li><a href="#monthlycardspending" data-section="monthlycardspending"><i class="fas fa-chart-pie me-2"></i><span>Aylık Kart Harc.</span></a></li>
+    <li><a href="#monthlyvendorspending" data-section="monthlyvendorspending"><i class="fas fa-receipt me-2"></i><span>Aylık Satıcı Harc.</span></a></li>
+        <li><a href="#reports" data-section="reports"><i class="fas fa-chart-bar me-2"></i><span>Raporlar</span></a></li>
+        <li><a href="#users" data-section="users"><i class="fas fa-user-cog me-2"></i><span>Kullanıcılar</span></a></li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <button class="btn btn-outline-secondary" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <span class="ms-3 h4" id="pageTitle">Dashboard</span>
+        </div>
+        <div>
+            <span class="me-3">Hoş geldiniz, <span id="adminName">Admin</span></span>
+            <button class="btn btn-outline-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i>Çıkış
+            </button>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="section-dashboard">
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card card-custom stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x mb-3"></i>
+                        <h4 id="totalCitizens">0</h4>
+                        <p>Toplam Vatandaş</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card-info">
+                    <div class="card-body text-center">
+                        <i class="fas fa-credit-card fa-3x mb-3"></i>
+                        <h4 id="totalCards">0</h4>
+                        <p>Toplam Kart</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card-warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exchange-alt fa-3x mb-3"></i>
+                        <h4 id="totalTransactions">0</h4>
+                        <p>Toplam İşlem</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card-danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h4 id="totalAlerts">0</h4>
+                        <p>Aktif Uyarı</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-custom">
+                    <div class="card-header card-header-custom">
+                        <h5><i class="fas fa-chart-line me-2"></i>Son İşlemler</h5>
+                    </div>
+                    <div class="card-body" id="recentTransactions">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-custom">
+                    <div class="card-header card-header-custom">
+                        <h5><i class="fas fa-bell me-2"></i>Son Uyarılar</h5>
+                    </div>
+                    <div class="card-body" id="recentAlerts">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citizens Section -->
+    <div id="section-citizens" style="display: none;">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="citizenSearch" placeholder="Ad, soyad veya TC ile ara...">
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-success" onclick="adminDashboard.addCitizen()">
+                    <i class="fas fa-plus me-2"></i>Yeni Vatandaş
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-users me-2"></i>Vatandaşlar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ad Soyad</th>
+                            <th>TC Kimlik</th>
+                            <th>Cinsiyet</th>
+                            <th>Doğum Tarihi</th>
+                            <th>Şehir</th>
+                            <th>Telefon</th>
+                            <th>E-posta</th>
+                            <th>Durum</th>
+                            <th>Oluşturma</th>
+                            <th>İşlemler</th>
+                        </tr>
+                        </thead>
+                        <tbody id="citizensTable">
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="citizensPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards Section -->
+    <div id="section-cards" style="display: none;">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="cardSearch" placeholder="Kart numarası ile ara...">
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-success" onclick="adminDashboard.addCard()">
+                    <i class="fas fa-plus me-2"></i>Yeni Kart
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-credit-card me-2"></i>Kartlar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Kart ID</th>
+                            <th>Kart No</th>
+                            <th>Vatandaş ID</th>
+                            <th>Veriliş Tarihi</th>
+                            <th>Son Kullanım Tarihi</th>
+                            <th>Güncel Bakiye</th>
+                            <th>Aylık Limit</th>
+                            <th>Durum</th>
+                            <th>Son Kullanım</th>
+                            <th>Kart Türü ID</th>
+                            <th>Oluşturma</th>
+                            <th>İşlemler</th>
+                        </tr>
+                        </thead>
+                        <tbody id="cardsTable">
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="cardsPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Section -->
+    <div id="section-transactions" style="display: none;">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="transactionSearch" placeholder="Kart numarası ile ara...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="statusFilter">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="completed">Tamamlanan</option>
+                    <option value="pending">Bekleyen</option>
+                    <option value="failed">Başarısız</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" id="dateFilter">
+            </div>
+            <div class="col-md-2 text-end">
+                <button class="btn btn-primary" onclick="adminDashboard.exportTransactions()">
+                    <i class="fas fa-download me-2"></i>Dışa Aktar
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-exchange-alt me-2"></i>Tüm İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>İşlem ID</th>
+                            <th>Tarih</th>
+                            <th>Kart ID</th>
+                            <th>Satıcı ID</th>
+                            <th>Tutar</th>
+                            <th>Tür</th>
+                            <th>Şehir</th>
+                            <th>Önceki Bakiye</th>
+                            <th>Yeni Bakiye</th>
+                            <th>Durum</th>
+                            <th>Fraud</th>
+                            <th>Oluşturma</th>
+                            <th>IP</th>
+                            <th>Cihaz</th>
+                            <th>Kural İhlalleri</th>
+                            <th>İşlemler</th>
+                        </tr>
+                        </thead>
+                        <tbody id="transactionsTable">
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="transactionsPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts Section -->
+    <div id="section-alerts" style="display: none;">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select class="form-select" id="alertTypeFilter">
+                    <option value="">Tüm Uyarı Türleri</option>
+                    <option value="fraud">Fraud Uyarısı</option>
+                    <option value="limit">Limit Uyarısı</option>
+                    <option value="system">Sistem Uyarısı</option>
+                </select>
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-success" onclick="adminDashboard.createAlert()">
+                    <i class="fas fa-plus me-2"></i>Yeni Uyarı
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-bell me-2"></i>Uyarılar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Uyarı ID</th>
+                            <th>Tarih</th>
+                            <th>Vatandaş</th>
+                            <th>Uyarı Türü</th>
+                            <th>Mesaj</th>
+                            <th>Gönderildi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                        </thead>
+                        <tbody id="alertsTable">
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="alertsPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendors Section -->
+    <div id="section-vendors" style="display: none;">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="vendorSearch" placeholder="Satıcı adı ile ara...">
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-success" onclick="adminDashboard.addVendor()">
+                    <i class="fas fa-plus me-2"></i>Yeni Satıcı
+                </button>
+            </div>
+        </div>
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-store me-2"></i>Satıcılar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Satıcı ID</th>
+                            <th>Satıcı Adı</th>
+                            <th>Kategori</th>
+                            <th>Şehir</th>
+                            <th>Adres</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                        </thead>
+                        <tbody id="vendorsTable">
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="vendorsPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other sections (cardtypes, rules, reports, users) would follow similar patterns -->
+    <div id="section-cardtypes" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-tags me-2"></i>Kart Türleri</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ad</th>
+                            <th>Açıklama</th>
+                            <th>Varsayılan Aylık Limit</th>
+                            <th>İzinli Kategoriler</th>
+                            <th>Aktif</th>
+                            <th>Oluşturma</th>
+                        </tr>
+                        </thead>
+                        <tbody id="cardtypesTable">
+                        <tr>
+                            <td colspan="3" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="cardtypesPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-rules" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-gavel me-2"></i>İşlem Kuralları</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ad</th>
+                            <th>Açıklama</th>
+                            <th>Tür</th>
+                            <th>Değer</th>
+                            <th>Önem</th>
+                            <th>Aktif</th>
+                            <th>Oluşturma</th>
+                            <th>Kural İfadesi</th>
+                            <th>Kart Türü ID</th>
+                        </tr>
+                        </thead>
+                        <tbody id="rulesTable">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="rulesPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-reports" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-chart-bar me-2"></i>Raporlar</h5>
+            </div>
+            <div class="card-body">
+                <p>Rapor modülü yakında gelecek...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-users" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-user-cog me-2"></i>Kullanıcılar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Kullanıcı ID</th>
+                            <th>TC</th>
+                            <th>Rol</th>
+                            <th>Citizen ID</th>
+                            <th>Şifre</th>
+                        </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="usersPagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flags Section -->
+    <div id="section-flags" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-flag me-2"></i>İhlal Bayrakları</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Flag ID</th>
+                            <th>Transaction ID</th>
+                            <th>Rule ID</th>
+                            <th>Kart ID</th>
+                            <th>İhlal Tarihi</th>
+                            <th>Detay</th>
+                            <th>Çözüldü</th>
+                            <th>Önem</th>
+                        </tr>
+                        </thead>
+                        <tbody id="flagsTable">
+                        <tr>
+                            <td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="flagsPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Balance History Section -->
+    <div id="section-balancehistories" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-history me-2"></i>Bakiye Geçmişi</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>History ID</th>
+                            <th>Kart ID</th>
+                            <th>Citizen ID</th>
+                            <th>Kart No</th>
+                            <th>Eski Bakiye</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>Ay</th>
+                            <th>Yeni Bakiye</th>
+                        </tr>
+                        </thead>
+                        <tbody id="balancehistoriesTable">
+                        <tr>
+                            <td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="balancehistoriesPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Credits Section -->
+    <div id="section-monthlycredits" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-gift me-2"></i>Aylık Krediler</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Kredi ID</th>
+                            <th>Kart ID</th>
+                            <th>Citizen ID</th>
+                            <th>Limit</th>
+                            <th>Bonus</th>
+                            <th>Toplam</th>
+                            <th>Ay</th>
+                            <th>Yıl</th>
+                            <th>Regüler</th>
+                            <th>Oluşturma</th>
+                        </tr>
+                        </thead>
+                        <tbody id="monthlycreditsTable">
+                        <tr>
+                            <td colspan="10" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="monthlycreditsPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Violations Section -->
+    <div id="section-monthlyviolations" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-exclamation-circle me-2"></i>Aylık İhlaller</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Citizen ID</th>
+                            <th>Yıl</th>
+                            <th>Ay</th>
+                            <th>İhlal Sayısı</th>
+                            <th>Son Güncelleme</th>
+                            <th>Kart ID</th>
+                        </tr>
+                        </thead>
+                        <tbody id="monthlyviolationsTable">
+                        <tr>
+                            <td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="monthlyviolationsPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Segments Section -->
+    <div id="section-segments" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-layer-group me-2"></i>Segmentler</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Segment ID</th>
+                            <th>Citizen ID</th>
+                            <th>Ad</th>
+                            <th>Ay</th>
+                            <th>Yıl</th>
+                            <th>Oluşturma</th>
+                        </tr>
+                        </thead>
+                        <tbody id="segmentsTable">
+                        <tr>
+                            <td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="segmentsPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Card Spending Section -->
+    <div id="section-monthlycardspending" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-chart-pie me-2"></i>Aylık Kart Harcamaları</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Spending ID</th>
+                            <th>Ay</th>
+                            <th>Kart ID</th>
+                            <th>Kart No</th>
+                            <th>Tutar</th>
+                            <th>Not</th>
+                        </tr>
+                        </thead>
+                        <tbody id="monthlycardspendingTable">
+                        <tr>
+                            <td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="monthlycardspendingPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Vendor Spending Section -->
+    <div id="section-monthlyvendorspending" style="display: none;">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <h5><i class="fas fa-receipt me-2"></i>Aylık Satıcı Harcamaları</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Spending ID</th>
+                            <th>Ay</th>
+                            <th>Kart ID</th>
+                            <th>Satıcı ID</th>
+                            <th>Kart No</th>
+                            <th>Satıcı Adı</th>
+                            <th>Tutar</th>
+                        </tr>
+                        </thead>
+                        <tbody id="monthlyvendorspendingTable">
+                        <tr>
+                            <td colspan="7" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination justify-content-center" id="monthlyvendorspendingPagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

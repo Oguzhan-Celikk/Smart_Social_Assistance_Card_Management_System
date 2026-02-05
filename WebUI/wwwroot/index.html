@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="tr">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kart Yönetim Sistemi - Giriş</title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+</head>
+<body class="login-page">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="login-container">
+                <div class="login-header">
+                    <i class="fas fa-credit-card fa-3x mb-3"></i>
+                    <h2>Kart Yönetim Sistemi</h2>
+                    <p class="mb-0">Giriş Yapın</p>
+                </div>
+                <div class="login-body">
+                    <div class="alert alert-danger" id="errorAlert" style="display: none;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span id="errorMessage"></span>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="input-group mb-3">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            <input type="text" class="form-control" id="nationalId" placeholder="TC Kimlik No" maxlength="11" required>
+                        </div>
+
+                        <div class="input-group mb-4">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            <input type="password" class="form-control" id="password" placeholder="Şifre" maxlength="16" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-login" id="loginButton">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Giriş Yap
+                        </button>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <small class="text-muted">
+                            Demo Hesaplar:<br>
+                            <strong>Admin:</strong> 12345678901 / admin123<br>
+                            <strong>Kullanıcı:</strong> 98765432109 / user123
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

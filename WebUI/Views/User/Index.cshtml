@@ -1,0 +1,180 @@
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml"; // use minimal layout without header/footer
+    ViewData["Title"] = "Kullanıcı Paneli";
+}
+
+<!-- Inject JWT token and role for JS to use -->
+<input type="hidden" id="jwtToken" value="@User.FindFirst("JWT")?.Value" />
+<input type="hidden" id="userRole" value="user" />
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="fas fa-credit-card me-2"></i>Kullanıcı Paneli</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto nav nav-pills" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#profile" data-bs-toggle="tab" data-bs-target="#profile" role="tab" aria-controls="profile" 
+                       aria-selected="true"><i class="fas fa-user me-2"></i>Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#cards" data-bs-toggle="tab" data-bs-target="#cards" role="tab" aria-controls="cards" 
+                       aria-selected="false"><i class="fas fa-credit-card me-2"></i>Kartlarım</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#transactions" data-bs-toggle="tab" data-bs-target="#transactions" role="tab" 
+                       aria-controls="transactions" aria-selected="false"><i class="fas fa-history me-2"></i>İşlemler</a>
+                </li>
+                <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Logout", "Login")" id="logoutBtn">Çıkış</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+</nav>
+
+<div class="container-fluid mt-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-custom">
+                <div class="card-body">
+                    <h4 class="welcome-text"><i class="fas fa-home me-2"></i>Hoş Geldiniz, <span id="userName">@User.Identity?.Name</span></h4>
+                    <p class="text-muted mb-0">Kart ve işlem bilgilerinizi aşağıdan takip edebilirsiniz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Profile Tab -->
+        <div class="tab-pane fade show active" id="profile">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-custom">
+                        <div class="card-header card-header-custom">
+                            <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Kişisel Bilgiler</h5>
+                        </div>
+                        <div class="card-body" id="profileInfo">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card card-custom balance-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-wallet fa-3x mb-3"></i>
+                                    <h5>Toplam Bakiye</h5>
+                                    <h2 id="totalBalance">₺0.00</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card card-custom card-info-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-credit-card fa-3x mb-3"></i>
+                                    <h5>Aktif Kart Sayısı</h5>
+                                    <h2 id="activeCards">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Tab -->
+        <div class="tab-pane fade" id="cards">
+            <div class="card card-custom">
+                <div class="card-header card-header-custom">
+                    <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Kartlarım</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Kart No</th>
+                                <th>Veriliş Tarihi</th>
+                                <th>Son Kullanım Tarihi</th>
+                                <th>Güncel Bakiye</th>
+                                <th>Aylık Limit</th>
+                                <th>Durum</th>
+                                <th>Son Kullanım</th>
+                            </tr>
+                            </thead>
+                            <tbody id="cardsTable">
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div class="tab-pane fade" id="transactions">
+            <div class="card card-custom">
+                <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>İşlem Geçmişi</h5>
+                    <div>
+                        <select class="form-select form-select-sm" id="cardFilter" style="width: 200px;">
+                            <option value="">Tüm Kartlar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Kart No</th>
+                                <th>Tutar</th>
+                                <th>İşlem Türü</th>
+                                <th>Şehir</th>
+                                <th>Önceki Bakiye</th>
+                                <th>Yeni Bakiye</th>
+                                <th>Durum</th>
+                                <th>Fraud Şüphesi</th>
+                            </tr>
+                            </thead>
+                            <tbody id="transactionsTable">
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav>
+                        <ul class="pagination justify-content-center" id="transactionPagination">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/user.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/site.css" />
+}

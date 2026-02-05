@@ -1,0 +1,256 @@
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f5fd;
+}
+
+/* Login Styles */
+.login-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.login-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  overflow: hidden;
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.login-body {
+  padding: 2rem;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  padding: 12px 15px;
+  margin-bottom: 1rem;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: none;
+}
+
+.btn-login {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  color: white;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  color: white;
+}
+
+/* Card Styles */
+.card-custom {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 15px 15px 0 0 !important;
+}
+
+/* Navbar Styles */
+.navbar-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* User navbar: keep links clean on hover and make logout red */
+.navbar-custom .nav-link {
+  color: #fff;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+  background-color: transparent !important; /* prevent blue/active-like hover */
+  color: #fff; /* keep text white for non-logout links */
+}
+
+/* Center nav button texts (and icons) horizontally */
+.navbar-custom .navbar-nav .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Make tab buttons (Profil, Kartlarım, İşlemler) transparent by default and when active */
+.navbar-custom .nav-pills .nav-link[data-bs-toggle="tab"] {
+  background-color: transparent !important;
+}
+.navbar-custom .nav-pills .nav-link[data-bs-toggle="tab"].active,
+.navbar-custom .nav-pills .show > .nav-link[data-bs-toggle="tab"] {
+  background-color: transparent !important;
+}
+
+/* Logout link styled red, including hover/focus */
+.navbar-custom #logoutBtn {
+  color: #dc3545 !important; /* Bootstrap danger red */
+}
+
+/* Logout: red background on hover */
+.navbar-custom #logoutBtn:hover,
+.navbar-custom #logoutBtn:focus {
+  background-color: #dc3545 !important; /* red background on hover */
+  color: #fff !important;
+}
+
+/* Ensure logout button text is centered relative to its background */
+.navbar-custom #logoutBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0rem; /* balanced spacing between icon and text */
+  padding-left: 1rem;
+  padding-right: 1.1rem; /* symmetric padding for visual centering */
+}
+
+/* Remove Bootstrap's extra right margin on the logout icon to avoid shifting text */
+.navbar-custom #logoutBtn .me-2 { margin-right: 0 !important; }
+
+/* Status Styles */
+.status-active { color: #28a745; }
+.status-inactive { color: #dc3545; }
+.status-pending { color: #ffc107; }
+
+/* Admin Sidebar */
+.sidebar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  z-index: 1000;
+  transition: all 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-header {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-menu a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.main-content {
+  margin-left: 250px;
+  transition: all 0.3s;
+  padding: 20px;
+}
+
+.main-content.expanded {
+  margin-left: 70px;
+}
+
+/* Stats Cards */
+.stats-card {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.stats-card-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+}
+
+.stats-card-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+  color: white;
+}
+
+.stats-card-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  color: white;
+}
+
+/* Utility Classes */
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.btn-sm-custom {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  margin: 0 2px;
+}
+
+.me-3 { 
+  font-size: 1.25rem; 
+  font-weight:600; 
+  font-family: 'Edu NSW ACT Hand Cursive', cursive;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.welcome-text{
+  font-family: 'Edu NSW ACT Hand Cursive', cursive;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+  }
+
+  .main-content {
+    margin-left: 70px;
+  }
+
+  .sidebar-menu a span {
+    display: none;
+  }
+}
